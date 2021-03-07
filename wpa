@@ -3,13 +3,6 @@ NUM="${2}"
 PASS="${3}"
 CARD="$(iw dev | awk '/Interface/ {print $2}')"
 
-if grep -q "wpa" $HOME/.bashrc
-then
-	echo "return 0" > /dev/null;
-else 
-	echo "alias wpa='doas wpa'" >> $HOME/.bashrc;
-fi
-
 cl() { wpa -c wpa_supplicant ;}
 scan() { iw dev $CARD scan | grep SSID | sed 's/SSID: //'>/dev/tty;} 
 
