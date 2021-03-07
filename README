@@ -5,7 +5,12 @@ dependencies:
 2) iw
 3) dhcpcd
 
-how to use:
+How to use:
+1) wpa -a <NAME OF THE NETWORK> <PASSWORD> # used to add the network
+2) wpa -c <NAME OF THE NETWORK> # used to connect to the network
+
+
+HELP PAGE:
     scan[--scan|-s]: scans for available wireless networks around you.
 
     add[--add|-a]: adds a network.
