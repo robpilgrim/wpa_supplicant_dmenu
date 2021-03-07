@@ -1,6 +1,4 @@
-
-
-dependencies: 
+Dependencies: 
 1) Wpa_supplicant
 2) iw
 3) dhcpcd
