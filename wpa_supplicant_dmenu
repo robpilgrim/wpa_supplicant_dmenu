@@ -1,6 +1,4 @@
 #!/bin/sh
-#NUM="${2}"
-#PASS="${3}"
 CARD=$(iw dev | awk '/Interface/ {print $2}')
 
 NUM=$((iw dev "$CARD" scan | grep SSID | awk -F': ' '{print $2}' && echo "disconnect" && echo "forget") | dmenu -i -p "What network do you want to connect to?" -l 10)
