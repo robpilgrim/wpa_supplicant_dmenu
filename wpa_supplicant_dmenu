@@ -1,0 +1,31 @@
+#!/bin/sh
+#NUM="${2}"
+#PASS="${3}"
+CARD=$(iw dev | awk '/Interface/ {print $2}')
+
+NUM=$((iw dev "$CARD" scan | grep SSID | awk -F': ' '{print $2}' && echo "disconnect" && echo "forget") | dmenu -i -p "What network do you want to connect to?" -l 10)
+
+check="$(ls /etc/wpa_supplicant/ | grep "$NUM")"
+
+if [ -n $NUM ] && [ -z $check ] && [ $NUM != "disconnect" ] && [ $NUM != "forget" ] ; then
+				     pass=$("$1" | dmenu -i -p "type the password."); 
+						 [ -z $pass ] && exit 1
+						 if [ -n $pass ] ; then
+							     touch /etc/wpa_supplicant/"$NUM".conf;echo "ctrl_interface=/run/wpa_supplicant" | 
+									 tee -a /etc/wpa_supplicant/"$NUM".conf ; echo "update_config=1" | 
+									 tee -a /etc/wpa_supplicant/"$NUM".conf ; wpa_passphrase "$NUM" "$pass" | 
+									 tee -a /etc/wpa_supplicant/"$NUM".conf ;
+									 wpa_supplicant -B -i $CARD -c /etc/wpa_supplicant/$NUM.conf
+				     fi
+elif [ -n "$check" ] && [ "$NUM" != "disconnect" ] && [ "$NUM" != "forget" ]; then
+				wpa_supplicant -B -i "$CARD" -c /etc/wpa_supplicant/$check 
+elif [ "$NUM" = "disconnect" ]; then
+								killall wpa_supplicant
+elif [ "$NUM" = "forget" ]; then
+				to_forget="$(ls /etc/wpa_supplicant | sed 's/.conf//' | dmenu -i -p "What network do you want to forget?" -l 10)"
+				    rm /etc/wpa_supplicant/$to_forget.conf
+            killall wpa_supplicant 
+else exit 0
+fi
+
+
