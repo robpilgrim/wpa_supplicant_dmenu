@@ -1,3 +1,4 @@
+
 Dependencies: 
 1) dmenu
 2) wpa_supplicant
@@ -8,3 +9,6 @@ How to use:
 1) Put the script in your PATH
 2) Bind it to some key in your windows manager's configuration file
 3) Press the key
+
+
+Don't forget to run the script as root
