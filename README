@@ -1,7 +1,8 @@
 Dependencies: 
-1) wpa_supplicant
-2) iw
-3) dhcpcd
+1) dmenu
+2) wpa_supplicant
+3) iw
+4) dhcpcd
 
 How to use:
 1) wpa -a <NAME OF THE NETWORK> <PASSWORD> # used to add the network
