@@ -1,14 +1,13 @@
 #!/bin/sh
-CARD=$(iw dev | awk '/Interface/ {print $2}')
-USER_L=$(cat /etc/passwd | grep /home/ | grep -v 'root' | awk -F: '{print $1}' )
-USERID=$(cat /etc/passwd | grep /home/ | grep -v 'root' | awk -F: '{print $3}' )
+#CARD=$(iw dev | awk '/Interface/ {print $2}')
+#USER_L=$(cat /etc/passwd | grep /home/ | grep -v 'root' | awk -F: '{print $1}' )
+#USERID=$(cat /etc/passwd | grep /home/ | grep -v 'root' | awk -F: '{print $3}' )
 
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$USERID/bus
-su $USER_L -c 'DISPLAY=:0 notify-send "Scanning"' 
+#export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$USERID/bus
+#su $USER_L -c 'DISPLAY=:0 notify-send "Scanning"' &
 
 NUM=$((iw dev "$CARD" scan | grep SSID | awk -F': ' '{print $2}' && echo "disconnect" && echo "forget") | dmenu -i -p "What network do you want to connect to?" -l 10)
-echo $USERID
-echo $USER_L
+
 check="$(ls /etc/wpa_supplicant/ | grep "$NUM")"
 
 if [ -n $NUM ] && [ -z $check ] && [ $NUM != "disconnect" ] && [ $NUM != "forget" ] ; then
