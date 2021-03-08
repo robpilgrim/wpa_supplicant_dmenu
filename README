@@ -5,21 +5,6 @@ Dependencies:
 4) dhcpcd
 
 How to use:
-1) wpa -a <NAME OF THE NETWORK> <PASSWORD> # used to add the network
-2) wpa -c <NAME OF THE NETWORK> # used to connect to the network
-
-
-HELP PAGE:
-    scan[--scan|-s]: scans for available wireless networks around you.
-
-    add[--add|-a]: adds a network.
-
-    connect[--connect|-c]: connects to a network.
-
-    cl[-cl] connects to the last connected network.
-
-    disconnect[--disconnect|-d]: disconnects from the web.
-
-    forget[--forget|-f]: removes a network from saved.
-
-    help[--help|-h]: opens the help page.
+1) Put the script in your PATH
+2) Bind it to some key in your windows manager's configuration file
+3) Press the key
