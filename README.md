@@ -3,12 +3,13 @@ Dependencies:
 * dmenu
 * wpa_supplicant
 * iw
-* dhcpcd
 
 How to use:
 1) Put the script in your PATH
 2) Bind it to some key
 3) Press the key
+
+OR just run it from your terminal emulator ¯\\_ (ツ)\_/¯.
 
 [Example](https://youtu.be/sJRGKM8RmXk)
 
