@@ -1,22 +1,22 @@
 #!/bin/sh
 CARD=$(iw dev | awk '/Interface/ {print $2}')
 USER_L=$(grep /home/ /etc/passwd | grep -v 'root' | awk -F: '{print $1}' )
-USERID=$(grep /home/ /etc/passwd | grep -v 'root' | awk -F: '{print $3}' )
-DISPLAY=$(echo $DISPLAY)
+USERID=$(echo $UID)
 #
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$USERID/bus
-#su $USER_L -c 'DISPLAY=$DISPLAY notify-send "Scanning"' &
+
 NUM="$((iw dev "$CARD" scan | grep SSID | awk -F': ' '{print $2}' && echo "disconnect" && echo "forget") | su $USER_L -c "DISPLAY=$DISPLAY dmenu -i -p \"What network do you want to connect to?\" -l 10")"
-check="$(ls /etc/wpa_supplicant/ | grep "$NUM")"
+check="$(for file in /etc/wpa_supplicant/*; do printf '%s\n' "$file"; done)"
+
 
 if [ -n $NUM ] && [ -z $check ] && [ $NUM != "disconnect" ] && [ $NUM != "forget" ] ; then
 				     pass=$("$1" | su $USER_L -c "DISPLAY=$DISPLAY dmenu -i -p \"Type the password.\""); 
 						 [ -z $pass ] && exit 1
 						 if [ -n $pass ] ; then
-							     touch /etc/wpa_supplicant/"$NUM".conf;echo "ctrl_interface=/run/wpa_supplicant" | 
-									 tee -a /etc/wpa_supplicant/"$NUM".conf ; echo "update_config=1" | 
-									 tee -a /etc/wpa_supplicant/"$NUM".conf ; wpa_passphrase "$NUM" "$pass" | 
-									 tee -a /etc/wpa_supplicant/"$NUM".conf ;
+							     touch /etc/wpa_supplicant/"$NUM".conf;echo "ctrl_interface=/run/wpa_supplicant" \
+									 >> /etc/wpa_supplicant/"$NUM".conf ; echo "update_config=1" \
+									 >> /etc/wpa_supplicant/"$NUM".conf ; wpa_passphrase "$NUM" "$pass" \
+									 >> /etc/wpa_supplicant/"$NUM".conf ;
                                      wpa_supplicant -B -i $CARD -c /etc/wpa_supplicant/$NUM.conf
 				     fi
 elif [ -n "$check" ] && [ "$NUM" != "disconnect" ] && [ "$NUM" != "forget" ]; then
