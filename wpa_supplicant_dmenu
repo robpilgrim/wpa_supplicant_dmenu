@@ -20,7 +20,7 @@ if [ -n $NUM ] && [ -z $check ] && [ $NUM != "disconnect" ] && [ $NUM != "forget
 					wpa_supplicant -B -i $CARD -c /etc/wpa_supplicant/$NUM.conf
 	fi
 elif [ -n "$check" ] && [ "$NUM" != "disconnect" ] && [ "$NUM" != "forget" ]; then
-	wpa_supplicant -B -i "$CARD" -c /etc/wpa_supplicant/$check 
+	wpa_supplicant -B -i "$CARD" -c $check 
 elif [ "$NUM" = "disconnect" ]; then
 	killall wpa_supplicant
 elif [ "$NUM" = "forget" ]; then
