@@ -1,10 +1,10 @@
 #!/bin/sh
 CARD=$(iw dev | awk '/Interface/ {print $2}')
 USER_L=$(whoami)
-#
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$UID/bus
+scan="$(DISPLAY=$DISPLAY notify-send "Scanning")"
 
-NUM="$((iw dev "$CARD" scan | grep SSID | sed 's/\\\S//gi;s/^d0\Ss//gi' | awk -F': ' '{print $2}' && echo "disconnect" && echo "forget") | su $USER_L -c "DISPLAY=$DISPLAY dmenu -i -p \"What network do you want to connect to?\" -l 10")"
+
+NUM="$((iw dev "$CARD" scan | grep SSID | sed 's/\\\S//gi;s/^d0\Ss//gi' | awk -F': ' '{print $2}' && echo "disconnect" && echo "forget" && killall dunst) | su $USER_L -c "DISPLAY=$DISPLAY dmenu -i -p \"What network do you want to connect to?\" -l 10")"
 
 check="$(for file in /etc/wpa_supplicant/*; do printf '%s\n' "$file"; done | grep "$NUM")"
 
@@ -20,12 +20,16 @@ if [ -n $NUM ] && [ -z $check ] && [ $NUM != "disconnect" ] && [ $NUM != "forget
 					wpa_supplicant -B -i $CARD -c /etc/wpa_supplicant/$NUM.conf
 	fi
 elif [ -n "$check" ] && [ "$NUM" != "disconnect" ] && [ "$NUM" != "forget" ]; then
+<<<<<<< HEAD
+	wpa_supplicant -B -i "$CARD" -c $check
+=======
 	wpa_supplicant -B -i "$CARD" -c $check 
+>>>>>>> 13d0893e61c6c7f1c2d5153d970e321a2872cafa
 elif [ "$NUM" = "disconnect" ]; then
 	killall wpa_supplicant
 elif [ "$NUM" = "forget" ]; then
-	to_forget="$(ls /etc/wpa_supplicant | sed 's/.conf//' | su $USER_L -c "DISPLAY=$DISPLAY dmenu -i -p \"What network do you want to forget?\" -l 10")"
-	rm /etc/wpa_supplicant/$to_forget.conf
+	to_forget="$(for file in /etc/wpa_supplicant/*; do printf '%s\n' "$file"; done | sed 's/.conf//' | su $USER_L -c "DISPLAY=$DISPLAY dmenu -i -p \"What network do you want to forget?\" -l 10")"
+	rm $to_forget.conf
 	killall wpa_supplicant 
 else exit 0
 fi
